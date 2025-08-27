@@ -7,6 +7,18 @@ export default function TodoItem({ text, onDeleteTask}) {
 		setCompleted((prev) => !prev);
 	};
 
+	// Toggle task status
+	// const handleToggleTask = async (id, status) => {
+	// 	const res = await fetch(`/api/tasks/${id}`, {
+	// 		method: "PATCH",
+	// 		headers: { "Content-Type": "application/json" },
+	// 		body: JSON.stringify({ status }),
+	// 	});
+	// 	const updated = await res.json();
+	// 	setTasks(tasks.map((t) => (t.id === id ? updated : t)));
+	// 	setCompleted((prev) => !prev);
+	// };
+
   const handleDeleteClick = () => {
     onDeleteTask(text);
   };
@@ -14,12 +26,7 @@ export default function TodoItem({ text, onDeleteTask}) {
 
 	return (
 	  <div className="flex items-center justify-between px-3 py-2 rounded-md shadow-sm bg-white my-2">
-		{/* Left: checkbox + text */}
-		{/* <div className="text-black flex items-center gap-2">
-		  <span className="text-orange-500">✔</span>
-		  <p>{text}</p>
-		</div> */}
-
+			{/* Left: checkbox + text */}
 			<div className="text-black flex items-center gap-2">
         <button
           onClick={toggleComplete}
@@ -34,13 +41,13 @@ export default function TodoItem({ text, onDeleteTask}) {
         <p className={completed ? "line-through text-gray-400" : ""}>{text}</p>
       </div>
 
-		{/* Right: delete button */}
-		<button
-			className="text-gray-500 hover:text-red-500"
-			onClick={handleDeleteClick}
-		>
-		  🗑
-		</button>
+			{/* Right: delete button */}
+			<button
+				className="text-gray-500 hover:text-red-500"
+				onClick={handleDeleteClick}
+			>
+				🗑
+			</button>
 	  </div>
 
 	);

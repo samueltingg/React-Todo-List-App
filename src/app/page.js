@@ -2,20 +2,34 @@
 
 import AddTaskBar from "@/components/AddTaskBar";
 import TodoItem from "@/components/TodoItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [tasks, setTasks] = useState(["task1", "task2"]);
+  const [tasks, setTasks] = useState([]);
+  // const [completed, setCompleted] = useState(false);
 
-  const handleAddTask = (taskText) => {
-    setTasks([...tasks, taskText]);
+  // Load tasks from DB
+  useEffect(() => {
+    fetch("/api/tasks")
+      .then((res) => res.json())
+      .then(setTasks);
+  }, []);
+
+  // Add task
+  const handleAddTask = async (text) => {
+    const res = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const newTask = await res.json();
+    setTasks([...tasks, newTask]);
   };
 
-  const handleDeleteTask = (taskText) => {
-    const index = tasks.indexOf(taskText); // first match
-    if (index !== -1) {
-      setTasks(tasks.filter((_, i) => i !== index));
-    }
+  // Delete task
+  const handleDeleteTask = async (id) => {
+    await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    setTasks(tasks.filter((t) => t.id !== id));
   };
 
   return (
@@ -29,9 +43,11 @@ export default function Home() {
       <div className="mt-4">
         {tasks.map((task, index) => (
           <TodoItem
-            key={index}
-            text={task}
-            onDeleteTask={handleDeleteTask}/>
+            key={task.id}
+            id={task.id}
+            text={task.text}
+            onDeleteTask={() => handleDeleteTask(task.id)}
+          />
         ))}
       </div>
     </div>

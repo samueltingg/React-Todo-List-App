@@ -9,6 +9,7 @@ export default function AddTaskBar({ onAddTask }) {
 			return;
 		}
 		onAddTask(value);
+		setValue("");
 	}
 
 	return (
